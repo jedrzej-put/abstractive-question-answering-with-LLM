@@ -42,15 +42,3 @@ class FAISSVectorDb(AbstractVectorDb):
 
         return relevant_docs
 
-
-
-
-
-
-# Load the FAISS index from the .faiss file
-index = faiss.read_index("/mnt/storage_2/scratch/pl0145-01/jsmok/data/vector_databases/faiss_vector_db_config_1/index.faiss")
-
-# Get the number of indexed vectors
-num_vectors = index.ntotal
-print(f"Number of indexed vectors: {num_vectors}")
-
