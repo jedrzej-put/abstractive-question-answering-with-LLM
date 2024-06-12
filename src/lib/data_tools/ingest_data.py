@@ -21,7 +21,9 @@ logger = logging.getLogger()
 def load_data_to_vector_db(config: Config):
     metadata, docs, lens = process_jsonl(config)
     logger.info(f"Number of documents: {len(docs)}")
+    
     if config.split_into_chunks:
+        logger.info("Splitting documents into chunks...")
         text_splitter = CharacterTextSplitter(
             chunk_size=config.max_chunk_size, chunk_overlap=config.chunk_overlap, separator=config.text_splitter_separator
         )
