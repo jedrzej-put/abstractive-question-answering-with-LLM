@@ -18,6 +18,12 @@ fastapi = "^0.111.0"
 langchain = "^0.2.3"
 gradio = "^4.36.1"
 polars = "^0.20.31"
+transformers = "^4.41.2"
+huggingface-hub = {extras = ["cli"], version = "^0.23.3"}
+faiss-gpu = "^1.7.2"
+pyyaml = "^6.0.1"
+langchain-community = "^0.2.4"
+python-dotenv = "^1.0.1"
 
 
 [build-system]

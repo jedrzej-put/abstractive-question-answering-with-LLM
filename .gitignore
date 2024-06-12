@@ -1,4 +1,4 @@
-
+/vector_databases/
 /data/
 /resources/
 # Byte-compiled / optimized / DLL files
@@ -17,7 +17,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
