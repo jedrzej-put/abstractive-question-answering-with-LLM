@@ -1,9 +1,7 @@
 import abc
-from typing import Iterable, List, Optional, Any
 import logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-logger = logging.getLogger()
+from typing import Iterable, List, Optional, Any
+from src.lib.common.tools import logger
 
 class AbstractVectorDb:
     @abc.abstractmethod

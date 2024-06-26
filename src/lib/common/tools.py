@@ -1,9 +1,25 @@
 import torch
 import logging
 import sys
+from pathlib import Path
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger()
+
+
+def get_logger() -> logging.Logger:
+    logFormatter = logging.Formatter("%(asctime)s [%(levelname)-5.5s]  %(message)s")
+    log_path = Path.cwd() / "resources" / "logs"
+    print(f"log_path: {log_path}")
+    log_path.mkdir(parents=True, exist_ok=True)
+    fileHandler = logging.FileHandler("{0}/{1}.log".format(log_path, "ingest_data"))
+    fileHandler.setFormatter(logFormatter)
+    logger = logging.getLogger()
+    logger.addHandler(fileHandler)
+    streamHandler = logging.StreamHandler(sys.stdout)
+    streamHandler.setFormatter(logFormatter)
+    logger.addHandler(streamHandler)
+    return logger
+
+logger = get_logger()
 
 def get_device():
     device = torch.device("cpu")

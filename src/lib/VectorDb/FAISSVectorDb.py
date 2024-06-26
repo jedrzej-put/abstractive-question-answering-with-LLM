@@ -4,10 +4,7 @@ import faiss
 import logging
 from typing import Iterable, List, Optional, Any
 from src.lib.VectorDb.AbstractVectorDb import AbstractVectorDb
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-logger = logging.getLogger()
+from src.lib.common.tools import logger
 
 class FAISSVectorDb(AbstractVectorDb):
     def __init__(self, embedding_model, vector_db_path):

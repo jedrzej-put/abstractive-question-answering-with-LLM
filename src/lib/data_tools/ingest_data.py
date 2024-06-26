@@ -13,14 +13,11 @@ from src.lib.common.tools import sort_docs_by_len, get_overwrite_console_logger
 from src.lib.VectorDb.tools import get_vector_db
 from src.lib.Embeddings.tools import get_embedding_model
 
-logging.basicConfig(level=logging.INFO)
-
-logger = logging.getLogger()
-overwrite_console_logger = get_overwrite_console_logger()
+from src.lib.common.tools import logger
 
 
 def split_documents_into_chunks(config, texts, metadatas) -> tuple[tuple[str], tuple[dict]]:
-    overwrite_console_logger.info("Splitting documents into chunks...")
+    logger.info("Splitting documents into chunks...")
     text_splitter = CharacterTextSplitter(
         chunk_size=config.max_chunk_size, chunk_overlap=config.chunk_overlap, separator=config.text_splitter_separator
     )
@@ -42,17 +39,17 @@ def load_data_to_vector_db(config: Config):
 
     text_counter = 0
     for texts, metadatas in process_jsonl(config):
-        # if config.split_into_chunks:
-        #     texts, metadatas = split_documents_into_chunks(config, texts, metadatas)
+        if config.split_into_chunks:
+            texts, metadatas = split_documents_into_chunks(config, texts, metadatas)
         
-        logger.debug(f"Calculating embeddings for {len(texts)} documents...")
+        logger.info(f"Calculating embeddings for {len(texts)} documents...")
         embeddings = embedding_model.embed_documents(texts)
         texts_embeddings_pairs = list(zip(texts, embeddings))
         
-        logger.debug(f"Storing embeddings in vector database...")
-        vector_db.store_embeddings(texts_embeddings_pairs, metadatas, logger=overwrite_console_logger)
+        logger.info(f"Storing embeddings in vector database...")
+        vector_db.store_embeddings(texts_embeddings_pairs, metadatas)
         text_counter += len(texts)
-        logger.debug(f"Number of documents processed so far: {text_counter}")
+        logger.info(f"Number of documents processed so far: {text_counter}")
 
     logger.info(f"Finished loading data to vector database")
     logger.info("Total number of documents processed: {text_counter}")

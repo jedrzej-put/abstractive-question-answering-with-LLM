@@ -2,11 +2,10 @@ import json
 from typing import Generator, Dict, Any
 from pathlib import Path
 from tqdm import tqdm
-import logging 
 from src.lib.common.tools import sort_docs_by_len
 from src.config.Config import Config
 from src.config.configs import get_config
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from src.lib.common.tools import logger
 
 # Generator function to read and process a JSONL file line by line
 def read_jsonl_file(file_path: Path) -> Generator[Dict[str, Any], None, None]:
@@ -18,11 +17,11 @@ def read_jsonl_file(file_path: Path) -> Generator[Dict[str, Any], None, None]:
 
 
 def process_jsonl(config: Config, batch_size: int=1024) -> Generator[tuple[tuple[str], tuple[dict[str, str]]], None, None]:
-    logging.info(f"Starting to process file: {config.passages_path}")
+    logger.info(f"Starting to process file: {config.passages_path}")
     metadatas, texts = [], []
     
     num_lines = sum(1 for _ in open(config.passages_path, 'r', encoding='utf-8'))
-    logging.info(f"Total number of lines in the file: {num_lines}")
+    logger.info(f"Total number of lines in the file: {num_lines}")
     
     for i, json_obj in enumerate(tqdm(read_jsonl_file(config.passages_path), total=num_lines, desc="Processing JSONL"), start=1):
         if 'id' in json_obj and 'title' in json_obj and 'text' in json_obj:
@@ -37,7 +36,7 @@ def process_jsonl(config: Config, batch_size: int=1024) -> Generator[tuple[tuple
         texts, metadatas = sort_docs_by_len(texts, metadatas)
         yield texts, metadatas
 
-    logging.info(f"Finished processing file: {config.passages_path}")
+    logger.info(f"Finished processing file: {config.passages_path}")
 
 if __name__ == "__main__":
     config = get_config("config1")
