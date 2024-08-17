@@ -3,7 +3,7 @@ from src.lib.VectorDb.FAISSVectorDb import FAISSVectorDb
 from src.lib.Embeddings.HFEmbeddings import HFMultilingualE5Embeddings
 from src.config.Config import Config
 
-root_path = Path.cwd()
+root_path = Path.cwd() / "qa" / "mt"
 vector_db_paths = root_path / "data" / "vector_databases"
 def get_config(config_name: str) -> Config:
     if config_name not in configs:
@@ -16,6 +16,7 @@ configs = {
         vector_db=FAISSVectorDb,
         vector_db_path=vector_db_paths / "faiss_vector_db_config_1",
         embedding_model=HFMultilingualE5Embeddings,
+        embedding_model_name="intfloat/multilingual-e5-large",
         max_chunk_size=512,
         chunk_overlap=200,
         split_into_chunks=True,

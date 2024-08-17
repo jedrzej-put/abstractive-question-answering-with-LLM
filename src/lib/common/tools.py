@@ -12,11 +12,13 @@ def get_logger() -> logging.Logger:
     log_path.mkdir(parents=True, exist_ok=True)
     fileHandler = logging.FileHandler("{0}/{1}.log".format(log_path, "ingest_data"))
     fileHandler.setFormatter(logFormatter)
+    # logger = logging.getLogger()
+    # logger.addHandler(fileHandler)
+    # streamHandler = logging.StreamHandler(sys.stdout)
+    # streamHandler.setFormatter(logFormatter)
+    # logger.addHandler(streamHandler)
     logger = logging.getLogger()
-    logger.addHandler(fileHandler)
-    streamHandler = logging.StreamHandler(sys.stdout)
-    streamHandler.setFormatter(logFormatter)
-    logger.addHandler(streamHandler)
+    logger.setFormatter(logFormatter)
     return logger
 
 logger = get_logger()

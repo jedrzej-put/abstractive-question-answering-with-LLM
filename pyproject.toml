@@ -25,6 +25,9 @@ pyyaml = "^6.0.1"
 langchain-community = "^0.2.4"
 python-dotenv = "^1.0.1"
 langchain-huggingface = "^0.0.3"
+ipykernel = "^6.29.5"
+seaborn = "^0.13.2"
+tqdm = "^4.66.4"
 
 
 [build-system]

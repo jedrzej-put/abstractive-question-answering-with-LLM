@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 from typing import Generator, Dict, Any
 from pathlib import Path
 from tqdm import tqdm
@@ -37,6 +38,24 @@ def process_jsonl(config: Config, batch_size: int=1024) -> Generator[tuple[tuple
         yield texts, metadatas
 
     logger.info(f"Finished processing file: {config.passages_path}")
+
+
+def process_jsonl_to_df(config: Config, filtered_passages_ids: list[int], save_path: str) -> pd.DataFrame:
+    logger.info(f"Starting to process file: {config.passages_path}")
+    metadatas, texts = [], []
+    
+    num_lines = sum(1 for _ in open(config.passages_path, 'r', encoding='utf-8'))
+    logger.info(f"Total number of lines in the file: {num_lines}")
+    
+    for i, json_obj in enumerate(tqdm(read_jsonl_file(config.passages_path), total=num_lines, desc="Processing JSONL"), start=1):
+        if 'id' in json_obj and 'title' in json_obj and 'text' in json_obj and json_obj['id'] in filtered_passages_ids:
+            metadatas.append({"id": json_obj['id'], "title": json_obj['title']})
+            texts.append(json_obj['text'])
+    df = pd.DataFrame({"passage_id": [metadata["id"] for metadata in metadatas], "title": [metadata["title"] for metadata in metadatas], "text": texts, "metadata": metadatas})
+    logger.info(f"Finished processing file: {config.passages_path}")
+
+    df.to_csv(save_path, index=False, sep=";", encoding="latin1")
+    return df
 
 if __name__ == "__main__":
     config = get_config("config1")
